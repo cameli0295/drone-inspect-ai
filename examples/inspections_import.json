@@ -1,0 +1,12 @@
+[
+  {
+    "inspection_date": "2026-08-02",
+    "location": "Bâtiment de démonstration - Saint-Denis",
+    "infrastructure_type": "Bâtiment",
+    "drone_id": 1,
+    "inspector_name": "Inspecteur Démo",
+    "weather_conditions": "Couvert",
+    "status": "Planifiée",
+    "description": "Import de démonstration JSON pour la thèse"
+  }
+]

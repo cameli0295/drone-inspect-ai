@@ -1,0 +1,2 @@
+inspection_date,location,infrastructure_type,drone_id,inspector_name,weather_conditions,status,description
+2026-08-01,Pont de démonstration - Paris 12e,Pont,1,Inspecteur Démo,Temps clair,Planifiée,Import de démonstration CSV pour la thèse

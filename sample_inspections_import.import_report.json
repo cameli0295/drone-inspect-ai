@@ -1,0 +1,33 @@
+{
+  "filepath": "sample_inspections_import.csv",
+  "imported_at": "2026-08-02T09:38:58",
+  "total_rows": 8,
+  "inserted": 4,
+  "rejected": 4,
+  "errors": [
+    {
+      "row": 5,
+      "reasons": [
+        "drone_id 99 introuvable dans la table drones"
+      ]
+    },
+    {
+      "row": 6,
+      "reasons": [
+        "inspection_date invalide : '2026-13-45' (attendu AAAA-MM-JJ)"
+      ]
+    },
+    {
+      "row": 7,
+      "reasons": [
+        "status invalide : 'Suspendue'"
+      ]
+    },
+    {
+      "row": 8,
+      "reasons": [
+        "colonne 'location' manquante ou vide"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+.env
+__pycache__/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+streamlit_stdout.log
+streamlit_stderr.log
+flask_stdout.log
+flask_stderr.log
+~$*.docx
+benchmark_before.json
+benchmark_after.json
+.streamlit/secrets.toml
+.streamlit/secrets.toml.example
+
+# Données locales volumineuses ou images métier non publiables
+uploads/
+data/
+Drone_inspection - Copie/
+
+# Documents academiques nominatifs
+CHERCHEM_CAMELIA_THESE.docx
+CHERCHEM_CAMELIA_THESE_avant_mise_a_jour.docx
+CHERCHEM_CAMELIA_THESE_MISE_A_JOUR.docx
+
+# Dump complet local (le dump demo anonymise reste publiable)
+dump_drone_inspection_ai.sql
+
+# Metadonnees et outils locaux non destines au depot public
+.agents/
+anais.PY
+db_config.py
+capture_app.py
+generate_visuals.py
+generate_report.py
+
+

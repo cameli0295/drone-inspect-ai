@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Rapports — DroneInspect Flask</title>
+  <link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}">
+</head>
+<body>
+<div class="app-shell">
+  {% include '_sidebar.html' %}
+  <div class="content">
+    <header class="topbar"><strong>Rapports</strong><span class="status">MySQL connecté</span></header>
+    <main>
+      <section class="hero reports-hero">
+        <h1>📄 Rapports d'intervention</h1>
+        <p>Consultez les résultats métier, visualisez l'image analysée et téléchargez un rapport PDF prêt à être transmis.</p>
+        <div class="hero-badges"><span>● Rapports PDF</span><span>● Priorisation</span><span>● Recommandations métier</span></div>
+      </section>
+
+      {% if selected %}
+      <form class="report-selector" method="get">
+        <label for="report_id">Sélectionner un rapport</label>
+        <select id="report_id" name="report_id" onchange="this.form.submit()">
+          {% for row in rows %}
+          <option value="{{ row.report_id }}" {{ 'selected' if row.report_id == selected.report_id else '' }}>Rapport n°{{ row.report_id }} — {{ row.class_name }} — {{ row.location }}</option>
+          {% endfor %}
+        </select>
+      </form>
+
+      <section class="report-detail-grid">
+        <div class="report-image-panel">
+          {% if selected.image_path %}
+          <img src="{{ url_for('web.report_image', report_id=selected.report_id) }}" alt="{{ selected.image_name or 'Image analysée' }}">
+          <small>{{ selected.image_name or 'Image analysée' }}</small>
+          {% else %}
+          <div class="image-unavailable">L'image associée n'est pas disponible.</div>
+          {% endif %}
+        </div>
+        <div>
+          <article class="card report-detail-card">
+            <h2>Rapport n°{{ selected.report_id }}</h2>
+            <div class="report-facts">
+              <div><p><b>Inspection :</b> n°{{ selected.inspection_id }}</p><p><b>Lieu :</b> {{ selected.location }}</p><p><b>Infrastructure :</b> {{ selected.infrastructure_type }}</p><p><b>Modèle :</b> {{ selected.model_name }}</p></div>
+              <div><p><b>Défaut :</b> {{ selected.class_name }}</p><p><b>Confiance :</b> {{ '%.2f'|format(selected.confidence|float) }} %</p><p><b>Priorité :</b> {{ selected.intervention_priority }}</p></div>
+            </div>
+            <p><b>Recommandation :</b> {{ selected.recommendation }}</p>
+          </article>
+          <div class="report-downloads">
+            <a class="inline-button" href="{{ url_for('web.report_pdf', report_id=selected.report_id) }}">📄 Télécharger le rapport PDF</a>
+            {% if selected.image_path %}<a class="inline-button secondary" href="{{ url_for('web.report_image', report_id=selected.report_id) }}?download=1" download>🖼️ Télécharger l'image</a>{% endif %}
+          </div>
+        </div>
+      </section>
+      <hr class="section-divider">
+      <section class="full-report-export"><h2>Exporter la liste complète des rapports</h2><div class="button-row"><a class="inline-button" href="{{ url_for('web.export_data',name='rapports',extension='csv') }}">Télécharger CSV</a><a class="inline-button secondary" href="{{ url_for('web.export_data',name='rapports',extension='xlsx') }}">Télécharger XLSX</a></div></section>
+      {% else %}
+      <div class="card">Aucun rapport disponible.</div>
+      {% endif %}
+    </main>
+  </div>
+</div>
+</body>
+</html>

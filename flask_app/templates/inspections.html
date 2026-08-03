@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="fr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Inspections — DroneInspect Flask</title><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body>
+<div class="app-shell">
+  {% include '_sidebar.html' %}
+  <div class="content">
+    <header class="topbar"><strong>Gestion des inspections</strong><span class="status">MySQL connecté</span></header>
+    <main>
+      <div class="page-title"><span>📋</span><h1>Gestion des inspections</h1></div>
+      {% if message %}<div class="alert success">✅ {{ message }}</div>{% endif %}
+      {% if error %}<div class="alert error">⚠️ {{ error }}</div>{% endif %}
+
+      <div class="tabs">
+        <button class="tab-button {{ 'active' if active_tab == 'create' else '' }}" data-tab="create">➕ Nouvelle inspection</button>
+        <button class="tab-button {{ 'active' if active_tab == 'history' else '' }}" data-tab="history">📚 Historique</button>
+      </div>
+
+      <section id="create" class="tab-panel {{ 'active' if active_tab == 'create' else '' }}">
+        <form class="inspection-form card" method="post">
+          <div class="form-grid">
+            <div class="field"><label for="inspection_date">Date de l’inspection</label><input id="inspection_date" name="inspection_date" type="date" value="{{ request.form.get('inspection_date', '') }}" required></div>
+            <div class="field"><label for="inspector_name">Inspecteur</label><input id="inspector_name" name="inspector_name" value="{{ request.form.get('inspector_name', 'Camelia Cherchem') }}" required></div>
+            <div class="field"><label for="location">Lieu</label><input id="location" name="location" placeholder="Pont urbain, Île-de-France" value="{{ request.form.get('location', '') }}" required></div>
+            <div class="field"><label for="weather_conditions">Conditions météorologiques</label><input id="weather_conditions" name="weather_conditions" value="{{ request.form.get('weather_conditions', '') }}"></div>
+            <div class="field"><label for="infrastructure_type">Type d’infrastructure</label><select id="infrastructure_type" name="infrastructure_type">{% for value in ['Pont','Toiture','Pylône','Bâtiment','Autre'] %}<option {{ 'selected' if request.form.get('infrastructure_type') == value else '' }}>{{ value }}</option>{% endfor %}</select></div>
+            <div class="field"><label for="status">Statut</label><select id="status" name="status">{% for value in ['Planifiée','En cours','Terminée','Annulée'] %}<option {{ 'selected' if request.form.get('status') == value else '' }}>{{ value }}</option>{% endfor %}</select></div>
+            <div class="field"><label for="drone_id">Drone utilisé</label><select id="drone_id" name="drone_id" required>{% for drone in drones %}<option value="{{ drone.drone_id }}">{{ drone.drone_name }} — {{ drone.drone_model }}</option>{% endfor %}</select></div>
+            <div class="field"><label for="description">Description</label><textarea id="description" name="description" rows="3">{{ request.form.get('description', '') }}</textarea></div>
+          </div>
+          <button class="primary-button" type="submit">💾 Enregistrer</button>
+        </form>
+      </section>
+
+      <section id="history" class="tab-panel {{ 'active' if active_tab == 'history' else '' }}">
+        <div class="card"><div class="card-heading"><div><h2>Historique des inspections</h2><p>{{ rows|length }} mission(s) enregistrée(s)</p></div></div><div class="table-wrap"><table><thead><tr><th>ID</th><th>Date</th><th>Lieu</th><th>Infrastructure</th><th>Drone</th><th>Inspecteur</th><th>Statut</th></tr></thead><tbody>{% for row in rows %}<tr><td>{{ row.inspection_id }}</td><td>{{ row.inspection_date }}</td><td>{{ row.location }}</td><td>{{ row.infrastructure_type }}</td><td>{{ row.drone_name }}</td><td>{{ row.inspector_name }}</td><td><span class="priority">{{ row.status }}</span></td></tr>{% endfor %}</tbody></table></div></div>
+      </section>
+    </main>
+  </div>
+</div>
+<script>
+  document.querySelectorAll('.tab-button').forEach(button => button.addEventListener('click', () => {
+    document.querySelectorAll('.tab-button,.tab-panel').forEach(el => el.classList.remove('active'));
+    button.classList.add('active'); document.getElementById(button.dataset.tab).classList.add('active');
+  }));
+</script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<aside class="sidebar">
+  <div class="brand">
+    <div class="brand-icon">🚁</div>
+    <div><strong>DroneInspect AI</strong><span>Plateforme d’inspection assistée par IA</span></div>
+  </div>
+  <p class="traceability">Traçabilité locale : Camelia Cherchem</p>
+  <p class="nav-title">NAVIGATION</p>
+  <nav class="side-nav">
+    <a class="{{ 'active' if active_page == 'accueil' else '' }}" href="{{ url_for('web.section_page', section='accueil') }}"><span>🏠</span> Accueil</a>
+    <a class="{{ 'active' if active_page == 'datasets' else '' }}" href="{{ url_for('web.section_page', section='datasets') }}"><span>📁</span> Datasets</a>
+    <a class="{{ 'active' if active_page == 'drones' else '' }}" href="{{ url_for('web.section_page', section='drones') }}"><span>🚁</span> Drones</a>
+    <a class="{{ 'active' if active_page == 'inspections' else '' }}" href="{{ url_for('web.section_page', section='inspections') }}"><span>📋</span> Inspections</a>
+    <a class="{{ 'active' if active_page == 'classification' else '' }}" href="{{ url_for('web.index') }}"><span>📷</span> Classification IA</a>
+    <a class="{{ 'active' if active_page == 'historique' else '' }}" href="{{ url_for('web.section_page', section='historique') }}"><span>📊</span> Historique</a>
+    <a class="{{ 'active' if active_page == 'rapports' else '' }}" href="{{ url_for('web.section_page', section='rapports') }}"><span>📄</span> Rapports</a>
+    <a class="{{ 'active' if active_page == 'dashboard' else '' }}" href="{{ url_for('web.section_page', section='dashboard') }}"><span>📈</span> Dashboard</a>
+    <a class="{{ 'active' if active_page == 'telechargements' else '' }}" href="{{ url_for('web.section_page', section='telechargements') }}"><span>📥</span> Téléchargements</a>
+    <a class="{{ 'active' if active_page == 'administration' else '' }}" href="{{ url_for('web.section_page', section='administration') }}"><span>⚙️</span> Administration</a>
+    <a class="{{ 'active' if active_page == 'import' else '' }}" href="{{ url_for('web.imports_page') }}"><span>📤</span> Import référentiel</a>
+  </nav>
+</aside>

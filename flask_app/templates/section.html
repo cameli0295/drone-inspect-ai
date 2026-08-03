@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="fr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{{ section.title }} — DroneInspect Flask</title><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body>
+<div class="app-shell">
+  {% include '_sidebar.html' %}
+  <div class="content">
+    <header class="topbar"><strong>{{ section.title }}</strong><span class="status">MySQL connecté</span></header>
+    <main>
+      <section class="hero"><p class="eyebrow">DRONEINSPECT FLASK</p><h1>{{ section.icon }} {{ section.title }}</h1><p>{{ section.description }}</p><div class="hero-badges"><span>● Interface Flask</span><span>● Base MySQL partagée</span><span>● Navigation unifiée</span></div></section>
+    </main>
+  </div>
+</div>
+</body>
+</html>

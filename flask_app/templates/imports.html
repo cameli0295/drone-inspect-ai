@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Import du référentiel — DroneInspect Flask</title>
+  <link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}">
+</head>
+<body>
+<div class="app-shell">
+  {% set active_page = 'import' %}{% include '_sidebar.html' %}
+  <div class="content">
+    <header class="topbar"><strong>Import référentiel</strong><span class="status">MySQL connecté</span></header>
+    <main class="import-streamlit-page">
+      <h1>Import du référentiel d’inspections</h1>
+      <p class="import-intro">Importez un fichier <b>CSV, XLSX ou JSON</b> contenant un référentiel d'inspections à intégrer à la base. Colonnes obligatoires :</p>
+      <div class="schema-code"><code>drone_id, inspection_date, location, infrastructure_type, inspector_name, weather_conditions, status, description</code><span title="Copier">▣</span></div>
+      <p class="import-explanation">Chaque ligne est validée avant insertion (drone existant, date, statut, type d'infrastructure). Les lignes invalides sont rejetées individuellement et documentées ci-dessous — l'import des lignes valides n'est jamais bloqué par les lignes en erreur.</p>
+
+      {% if message %}<div class="alert success">✅ {{ message }}</div>{% endif %}
+      {% if error %}<div class="alert error">⚠️ {{ error }}</div>{% endif %}
+
+      <form class="streamlit-upload-form" method="post" enctype="multipart/form-data">
+        <label for="referential">Fichier à importer</label>
+        <label class="upload-zone" for="referential">
+          <input id="referential" type="file" name="referential" accept=".csv,.xlsx,.json" required>
+          <span class="upload-copy"><span class="upload-icon">☁️</span><span><strong>Glissez-déposez le fichier ici ou cliquez pour parcourir</strong><small id="file-name">Limite 200 Mo par fichier · CSV, XLSX, JSON</small></span></span>
+        </label>
+        <button class="primary-button" type="submit">📥 Importer le référentiel</button>
+      </form>
+    </main>
+  </div>
+</div>
+<script>const input=document.getElementById('referential'),name=document.getElementById('file-name');input?.addEventListener('change',()=>{if(input.files[0])name.textContent=input.files[0].name;});</script>
+</body>
+</html>

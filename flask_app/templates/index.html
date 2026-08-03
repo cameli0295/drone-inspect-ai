@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DroneInspect Flask — Analyse IA</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="app-shell">
+  {% set active_page = 'classification' %}
+  {% include '_sidebar.html' %}
+
+  <div class="content">
+    <header class="topbar"><strong>Interface de classification parallèle</strong><span class="status">MySQL connecté</span></header>
+    <main>
+      <section class="hero">
+        <p class="eyebrow">FLASK · PORT 5000</p>
+        <h1>Station d’analyse IA</h1>
+        <p>Importez une image d’inspection. MobileNetV2 détecte une fissure, puis EfficientNetB3 identifie précisément la nature des défauts.</p>
+        <div class="hero-badges"><span>● Analyse automatique</span><span>● Enregistrement MySQL</span><span>● API JSON</span></div>
+      </section>
+
+      {% if error %}<div class="alert error">⚠️ {{ error }}</div>{% endif %}
+
+      <section class="card">
+        <div class="card-heading"><div><h2>Nouvelle analyse</h2><p>Sélectionnez une mission et déposez une image de l’infrastructure.</p></div><span class="step">ÉTAPE 1</span></div>
+        <form method="post" action="/analyze" enctype="multipart/form-data">
+          <div class="field">
+            <label for="inspection_id">Mission d’inspection</label>
+            <select id="inspection_id" name="inspection_id" required>
+              {% for row in inspections %}<option value="{{ row.inspection_id }}">Inspection n°{{ row.inspection_id }} — {{ row.location }} ({{ row.inspection_date }})</option>{% endfor %}
+            </select>
+          </div>
+          <div class="field">
+            <label for="image">Image de l’infrastructure</label>
+            <label class="upload-zone" for="image">
+              <input id="image" type="file" name="image" accept="image/jpeg,image/png,image/webp" required>
+              <span class="upload-copy"><span class="upload-icon">☁️</span><strong>Déposez une image ou cliquez pour parcourir</strong><small id="file-name">JPG, PNG ou WEBP</small></span>
+              <img id="preview" class="preview" alt="Aperçu de l’image sélectionnée">
+            </label>
+          </div>
+          <button class="primary-button" type="submit">🤖 Lancer l’analyse automatique</button>
+        </form>
+      </section>
+
+      {% if result %}
+      <section class="card result">
+        <div class="card-heading"><div><h2>Résultat enregistré</h2><p>L’analyse a été enregistrée dans la même base MySQL que Streamlit.</p></div><span class="step">TERMINÉ</span></div>
+        <div class="result-summary">
+          <div class="metric-card"><small>Classe principale</small><strong>{{ result.class_predicted }}</strong></div>
+          <div class="metric-card accent"><small>Confiance</small><strong>{{ result.confidence_percent }} %</strong></div>
+        </div>
+        <p class="database-note">Image MySQL n°{{ result.database.image_id }} · Prédictions {{ result.database.prediction_ids|join(', ') }}</p>
+
+        <div class="level-section">
+          <h3>Niveau 1 — Détection binaire</h3>
+          <div class="level-grid"><article class="defect-card"><h4>{{ result.level_1.class_name }}</h4><div class="defect-meta"><span>{{ (result.level_1.confidence * 100)|round(2) }} %</span><span class="priority">{{ result.level_1.priority }}</span></div></article></div>
+        </div>
+        {% if result.level_2 %}
+        <div class="level-section">
+          <h3>Niveau 2 — Nature des défauts</h3>
+          <div class="level-grid">
+            {% for item in result.level_2 %}<article class="defect-card"><h4>{{ item.original_label }}</h4><div class="defect-meta"><span>{{ (item.confidence * 100)|round(2) }} %</span><span class="priority">{{ item.priority }}</span></div><p>{{ item.recommendation }}</p></article>{% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      </section>
+      {% endif %}
+
+      <section class="card api-card"><div><h2>API JSON</h2><p>La même analyse est disponible pour une intégration externe.</p></div><div><code>POST /predict</code><p class="database-note">multipart : inspection_id + image</p></div></section>
+    </main>
+  </div>
+</div>
+<script>
+  const input = document.getElementById('image');
+  const preview = document.getElementById('preview');
+  const copy = document.querySelector('.upload-copy');
+  const fileName = document.getElementById('file-name');
+  input?.addEventListener('change', () => {
+    const file = input.files[0];
+    if (!file) return;
+    fileName.textContent = file.name;
+    preview.src = URL.createObjectURL(file);
+    preview.style.display = 'block';
+    copy.style.display = 'none';
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+drone_id,inspection_date,location,infrastructure_type,inspector_name,weather_conditions,status,description
+1,2026-07-10,Toiture entrepôt Saint-Denis,Toiture,Camelia Cherchem,Ciel dégagé,Terminée,Inspection de toiture suite à signalement d'infiltration.
+1,2026-07-12,Pylône ligne HT Bobigny,Pylône,Camelia Cherchem,Vent modéré,Planifiée,Contrôle périodique annuel du pylône.
+1,2026-07-15,Pont RN2 Aulnay,Pont,Camelia Cherchem,Pluie légère,En cours,Inspection suite à alerte fissuration.
+1,2026-07-18,Bâtiment industriel Pantin,Bâtiment,Camelia Cherchem,Ciel dégagé,Terminée,Contrôle de façade béton.
+99,2026-07-20,Silo agricole test,Autre,Camelia Cherchem,Ciel dégagé,Terminée,Ligne invalide : drone_id 99 n'existe pas.
+1,2026-13-45,Zone test date invalide,Pont,Camelia Cherchem,Ciel dégagé,Terminée,Ligne invalide : date impossible.
+1,2026-07-22,Zone test statut invalide,Pont,Camelia Cherchem,Ciel dégagé,Suspendue,Ligne invalide : statut hors ENUM autorisé.
+1,2026-07-25,,Pont,Camelia Cherchem,Ciel dégagé,Terminée,Ligne invalide : localisation vide.

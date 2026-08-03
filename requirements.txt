@@ -1,0 +1,13 @@
+
+
+streamlit
+flask
+python-dotenv
+mysql-connector-python
+pandas
+pillow
+tensorflow
+numpy
+openpyxl
+plotly
+reportlab
