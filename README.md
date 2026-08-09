@@ -193,6 +193,8 @@ port = 3306
 database = "VOTRE_BASE_DB4FREE"
 user = "VOTRE_UTILISATEUR_DB4FREE"
 password = "VOTRE_MOT_DE_PASSE_DB4FREE"
+charset = "utf8mb4"
+use_unicode = true
 ```
 
 `shared_config.py` utilise en priorité `st.secrets["mysql"]` dans un contexte Streamlit, puis retombe sur `.env` en local. Ne jamais commiter `.streamlit/secrets.toml`.

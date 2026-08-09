@@ -22,6 +22,20 @@ def _required(name: str) -> str:
     return value.strip()
 
 
+def _as_bool(value: object, *, default: bool = True) -> bool:
+    """Convertit une option TOML/.env en booléen sans accepter d'ambiguïté."""
+    if value is None:
+        return default
+    if isinstance(value, bool):
+        return value
+    normalized = str(value).strip().lower()
+    if normalized in {"1", "true", "yes", "on"}:
+        return True
+    if normalized in {"0", "false", "no", "off"}:
+        return False
+    raise ValueError(f"Valeur booléenne invalide : {value!r}")
+
+
 def _get_streamlit_mysql_config() -> dict[str, object] | None:
     """Lit ``st.secrets.mysql`` lorsqu'un contexte Streamlit le fournit."""
     try:
@@ -53,6 +67,8 @@ def _get_streamlit_mysql_config() -> dict[str, object] | None:
             "user": str(section["user"]).strip(),
             "password": str(section["password"]),
             "database": str(section["database"]).strip(),
+            "charset": str(section.get("charset", "utf8mb4")).strip(),
+            "use_unicode": _as_bool(section.get("use_unicode"), default=True),
         }
     except (FileNotFoundError, KeyError, RuntimeError, TypeError, ValueError):
         # Hors Streamlit ou sans secrets locaux : la configuration .env reste active.
@@ -75,4 +91,6 @@ def get_mysql_config() -> dict[str, object]:
         "user": _required("MYSQL_USER"),
         "password": _required("MYSQL_PASSWORD"),
         "database": _required("MYSQL_DATABASE"),
+        "charset": os.getenv("MYSQL_CHARSET", "utf8mb4").strip(),
+        "use_unicode": _as_bool(os.getenv("MYSQL_USE_UNICODE"), default=True),
     }

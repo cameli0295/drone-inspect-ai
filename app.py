@@ -597,14 +597,8 @@ def get_connection():
     Les paramètres sont chargés depuis le fichier ``.env`` local.
     """
     return mysql.connector.connect(
-        host=MYSQL_CONFIG["host"],
-        port=MYSQL_CONFIG["port"],
-        user=MYSQL_CONFIG["user"],
-        password=MYSQL_CONFIG["password"],
-        database=MYSQL_CONFIG["database"],
+        **MYSQL_CONFIG,
         autocommit=False,
-        charset="utf8mb4",
-        use_unicode=True,
     )
 
 

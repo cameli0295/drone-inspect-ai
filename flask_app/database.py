@@ -19,9 +19,7 @@ UPLOAD_DIR.mkdir(exist_ok=True)
 
 
 def connect():
-    return mysql.connector.connect(
-        **get_mysql_config(), autocommit=False, charset="utf8mb4", use_unicode=True
-    )
+    return mysql.connector.connect(**get_mysql_config(), autocommit=False)
 
 
 @contextmanager

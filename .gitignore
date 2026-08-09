@@ -27,6 +27,7 @@ CHERCHEM_CAMELIA_THESE_MISE_A_JOUR.docx
 
 # Dump complet local (le dump demo anonymise reste publiable)
 dump_drone_inspection_ai.sql
+database/backups/
 
 # Metadonnees et outils locaux non destines au depot public
 .agents/
@@ -35,5 +36,4 @@ db_config.py
 capture_app.py
 generate_visuals.py
 generate_report.py
-
 
