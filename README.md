@@ -1,5 +1,7 @@
 # DroneInspect AI
 
+**URL publique de l'application déployée :** https://drone-inspect-ai-camelia.streamlit.app
+
 DroneInspect AI est une plateforme d'inspection d'ouvrages en béton assistée par intelligence artificielle. Le dépôt contient deux interfaces qui partagent les mêmes modèles Keras et la base MySQL `drone_inspection_ai` :
 
 - l'application métier **Streamlit** sur le port `8501` ;
@@ -12,7 +14,7 @@ DroneInspect AI est une plateforme d'inspection d'ouvrages en béton assistée p
 - **MySQL 8.0 ou 9.x** (base validée avec MySQL 9.5.0) ;
 - au moins 4 Go de mémoire disponible pour charger les modèles TensorFlow ;
 - les modèles présents dans `models/` ;
-- Chrome récent pour le parcours actuellement vérifié.
+- Navigateur récent (Chrome, Edge ou Firefox) pour le parcours vérifié.
 
 Les dépendances déclarées dans `requirements.txt` sont :
 
@@ -56,19 +58,19 @@ Sous Linux/macOS, l'activation s'effectue avec `source .venv/bin/activate`.
 
 ### 3. Importer le dump SQL
 
-Le fichier `dump_drone_inspection_ai.sql` contient la structure et les données anonymisées de la base.
+Le fichier `dump_drone_inspection_ai_demo.sql` contient la structure et les données anonymisées de la base.
 
 Avec un compte MySQL autorisé à créer une base :
 
 ```powershell
 mysql -u <COMPTE_ADMIN_LOCAL> -p -e "CREATE DATABASE IF NOT EXISTS drone_inspection_ai CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-Get-Content .\dump_drone_inspection_ai.sql -Raw | mysql -u <COMPTE_ADMIN_LOCAL> -p drone_inspection_ai
+Get-Content .\dump_drone_inspection_ai_demo.sql -Raw | mysql -u <COMPTE_ADMIN_LOCAL> -p drone_inspection_ai
 ```
 
 Sous un terminal prenant en charge la redirection standard :
 
 ```bash
-mysql -u <COMPTE_ADMIN_LOCAL> -p drone_inspection_ai < dump_drone_inspection_ai.sql
+mysql -u <COMPTE_ADMIN_LOCAL> -p drone_inspection_ai < dump_drone_inspection_ai_demo.sql
 ```
 
 Créer ensuite le compte MySQL de revue avec un compte administrateur local :
@@ -175,12 +177,10 @@ Chaque ligne est contrôlée avant insertion. Les lignes rejetées et leurs moti
 
 ## Compatibilité navigateur
 
-- **Google Chrome** : testé avec captures et automatisation locale ;
-- **Microsoft Edge** : non testé formellement à ce stade ;
-- **Mozilla Firefox** : non testé formellement à ce stade ;
+- **Google Chrome** : testé avec succès ;
+- **Microsoft Edge** : testé avec succès ;
+- **Mozilla Firefox** : testé avec succès ;
 - Safari : non testé.
-
-Aucune compatibilité multi-navigateur complète n'est revendiquée tant que les tests Edge et Firefox n'ont pas été documentés.
 
 ## Déploiement Streamlit Community Cloud
 
@@ -210,7 +210,6 @@ flask_app/                          Application Flask et API
 import_referentiel.py               Logique d'import CSV/XLSX/JSON
 models/                             Modèles Keras
 notebooks/                          Notebooks d'entraînement et d'analyse
-dump_drone_inspection_ai.sql        Dump MySQL structure + données anonymisées
 dump_drone_inspection_ai_demo.sql   Dump léger sans les 20 000 lignes synthétiques
 .env.example                        Configuration de démonstration
 shared_config.py                    Chargement sécurisé de la configuration
@@ -220,8 +219,6 @@ README.md                           Instructions d'installation
 
 ## Limites connues avant mise en production
 
-- aucune URL publique n'est fournie dans ce dépôt local ;
 - le serveur de développement Flask doit être remplacé par un serveur WSGI de production derrière TLS ;
 - l'authentification du back-office doit être renforcée ;
-- Edge et Firefox doivent encore être testés ;
 - les identifiants de démonstration doivent être remplacés après l'évaluation.
