@@ -2617,7 +2617,7 @@ def page_downloads() -> None:
 
 def page_admin() -> None:
     """
-    Administration locale protégée par authentification.
+    Administration locale.
 
     Cette page permet :
     - de consulter et ajouter des utilisateurs métier ;
@@ -2625,30 +2625,8 @@ def page_admin() -> None:
     - de consulter les modèles IA ;
     - de consulter les journaux d'activité.
 
-    Les comptes sont également utilisés pour contrôler l'accès à cette page.
     """
     st.title("⚙ Administration")
-
-    if not st.session_state.get("admin_authenticated", False):
-        st.subheader("Connexion administrateur")
-        email = st.text_input("Adresse e-mail", key="admin_email")
-        password = st.text_input(
-            "Mot de passe",
-            type="password",
-            key="admin_password",
-        )
-
-        if st.button("Se connecter", type="primary"):
-            if verify_admin_password(email, password):
-                st.session_state["admin_authenticated"] = True
-                st.rerun()
-            else:
-                st.error("E-mail ou mot de passe administrateur incorrect.")
-        return
-
-    if st.button("Se déconnecter"):
-        st.session_state["admin_authenticated"] = False
-        st.rerun()
 
     tab_users, tab_models, tab_logs = st.tabs(
         [
@@ -2922,9 +2900,25 @@ def main() -> None:
     """
     Point d'entrée de l'application.
 
-    Aucun écran de connexion n'est affiché :
-    l'utilisateur accède directement au menu principal.
+    L'utilisateur doit être authentifié avant d'accéder au menu principal.
     """
+    if not st.session_state.get("admin_authenticated", False):
+        st.subheader("Connexion administrateur")
+        email = st.text_input("Adresse e-mail", key="admin_email")
+        password = st.text_input(
+            "Mot de passe",
+            type="password",
+            key="admin_password",
+        )
+
+        if st.button("Se connecter", type="primary"):
+            if verify_admin_password(email, password):
+                st.session_state["admin_authenticated"] = True
+                st.rerun()
+            else:
+                st.error("E-mail ou mot de passe administrateur incorrect.")
+        st.stop()
+
     try:
         # Vérification simple de la connexion et de la structure principale.
         fetch_one_value("SELECT COUNT(*) FROM datasets")
@@ -2949,6 +2943,9 @@ def main() -> None:
     st.sidebar.caption(
         f"Traçabilité locale : {local_user['full_name']}"
     )
+    if st.sidebar.button("Se déconnecter"):
+        st.session_state["admin_authenticated"] = False
+        st.rerun()
 
     page = st.sidebar.radio(
         "Navigation",

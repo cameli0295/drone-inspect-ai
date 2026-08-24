@@ -2,6 +2,8 @@
 
 **URL publique de l'application déployée :** https://drone-inspect-ai-camelia.streamlit.app
 
+L'accès à l'application nécessite désormais une authentification (voir section **Identifiants de test**).
+
 DroneInspect AI est une plateforme d'inspection d'ouvrages en béton assistée par intelligence artificielle. Le dépôt contient deux interfaces qui partagent les mêmes modèles Keras et la base MySQL `drone_inspection_ai` :
 
 - l'application métier **Streamlit** sur le port `8501` ;
@@ -145,14 +147,14 @@ Le compte ne possède ni `DROP`, ni `CREATE`, ni `ALTER`, ni `INDEX`, ni `GRANT 
 
 Ces identifiants sont des identifiants de démonstration livrables. Ils doivent être changés ou supprimés après l'évaluation.
 
-### Identifiants administrateur applicatif
+### Identifiants de connexion à l'application
 
 ```text
 E-mail : admin.demo@example.invalid
 Mot de passe : Admin_DroneInspect_2026!
 ```
 
-L'accès à la page **Administration** nécessite désormais cette connexion applicative.
+Ce compte donne accès à l'ensemble de l'application Streamlit, y compris à la page **Administration**.
 
 ## Identifiants de connexion à la base SQL
 
@@ -168,14 +170,14 @@ L'application ne doit jamais utiliser ni exposer le compte MySQL `root`. La conf
 
 ## Accès administrateur au back-office
 
-La page **Administration** de Streamlit présente un formulaire de connexion applicative. Pour accéder au back-office :
+Le formulaire de connexion apparaît dès l'ouverture de l'application Streamlit, avant le menu latéral. Pour accéder à l'application et au back-office :
 
 1. lancer Streamlit ;
 2. ouvrir `http://localhost:8501` ;
-3. sélectionner **Administration** dans le menu latéral ;
-4. saisir l'e-mail et le mot de passe administrateur indiqués dans la section « Identifiants de test ».
+3. saisir l'e-mail et le mot de passe indiqués dans la section « Identifiants de test » ;
+4. sélectionner ensuite la page souhaitée dans le menu latéral.
 
-Seul un utilisateur actif ayant le rôle `Administrateur` et un hash SHA-256 valide dans la table `users` peut ouvrir cette page. L'authentification reste active pendant la session Streamlit et un bouton **Se déconnecter** permet de la réinitialiser. Le compte MySQL `demo_reviewer` permet les lectures et écritures nécessaires, mais ne constitue pas le compte de connexion visuel au back-office.
+L'authentification reste active pendant la session Streamlit et un bouton **Se déconnecter**, toujours visible dans le menu latéral, permet de la réinitialiser. Ce compte unique donne accès à toute l'application sans distinction de rôle. Les rôles `Administrateur`, `Inspecteur` et `Observateur` existent dans le schéma de données, mais ne différencient pas encore les permissions : il s'agit d'une simplification assumée du POC. Le compte MySQL `demo_reviewer` permet les lectures et écritures nécessaires, mais ne constitue pas le compte de connexion visuel à l'application.
 
 ## Import du référentiel
 
