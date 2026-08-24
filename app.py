@@ -2903,20 +2903,36 @@ def main() -> None:
     L'utilisateur doit être authentifié avant d'accéder au menu principal.
     """
     if not st.session_state.get("admin_authenticated", False):
-        st.subheader("Connexion administrateur")
-        email = st.text_input("Adresse e-mail", key="admin_email")
-        password = st.text_input(
-            "Mot de passe",
-            type="password",
-            key="admin_password",
-        )
+        _, login_column, _ = st.columns([1, 1.2, 1])
 
-        if st.button("Se connecter", type="primary"):
-            if verify_admin_password(email, password):
-                st.session_state["admin_authenticated"] = True
-                st.rerun()
-            else:
-                st.error("E-mail ou mot de passe administrateur incorrect.")
+        with login_column:
+            st.markdown(
+                """
+                <div style="padding:1rem 0 1.5rem;text-align:center;">
+                    <div style="font-size:2rem;font-weight:800;">
+                        🚁 DroneInspect AI
+                    </div>
+                    <div style="font-size:0.95rem;opacity:0.78;margin-top:0.35rem;">
+                        Plateforme d'inspection assistée par IA
+                    </div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+            st.subheader("Connexion administrateur")
+            email = st.text_input("Adresse e-mail", key="admin_email")
+            password = st.text_input(
+                "Mot de passe",
+                type="password",
+                key="admin_password",
+            )
+
+            if st.button("Se connecter", type="primary"):
+                if verify_admin_password(email, password):
+                    st.session_state["admin_authenticated"] = True
+                    st.rerun()
+                else:
+                    st.error("E-mail ou mot de passe administrateur incorrect.")
         st.stop()
 
     try:
