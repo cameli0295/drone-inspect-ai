@@ -661,6 +661,22 @@ def is_valid_sha256(value: Optional[str]) -> bool:
     return all(character in "0123456789abcdefABCDEF" for character in value)
 
 
+def verify_admin_password(email: str, password: str) -> bool:
+    """Vérifie les identifiants d'un compte administrateur actif."""
+    password_hash = hashlib.sha256(password.encode("utf-8")).hexdigest()
+    stored_hash = fetch_one_value(
+        """
+        SELECT password_hash
+        FROM users
+        WHERE email = %s
+          AND role = 'Administrateur'
+          AND is_active = 1
+        """,
+        (email.strip().lower(),),
+    )
+    return bool(stored_hash) and stored_hash == password_hash
+
+
 def ensure_database_compatibility() -> None:
     """
     Met la table users au format attendu par l'application.
@@ -2628,7 +2644,7 @@ def page_downloads() -> None:
 
 def page_admin() -> None:
     """
-    Administration locale sans authentification.
+    Administration locale protégée par authentification.
 
     Cette page permet :
     - de consulter et ajouter des utilisateurs métier ;
@@ -2636,10 +2652,30 @@ def page_admin() -> None:
     - de consulter les modèles IA ;
     - de consulter les journaux d'activité.
 
-    Les comptes sont utilisés uniquement pour la traçabilité et l'affichage.
-    Aucun mot de passe n'est demandé par l'application.
+    Les comptes sont également utilisés pour contrôler l'accès à cette page.
     """
     st.title("⚙ Administration")
+
+    if not st.session_state.get("admin_authenticated", False):
+        st.subheader("Connexion administrateur")
+        email = st.text_input("Adresse e-mail", key="admin_email")
+        password = st.text_input(
+            "Mot de passe",
+            type="password",
+            key="admin_password",
+        )
+
+        if st.button("Se connecter", type="primary"):
+            if verify_admin_password(email, password):
+                st.session_state["admin_authenticated"] = True
+                st.rerun()
+            else:
+                st.error("E-mail ou mot de passe administrateur incorrect.")
+        return
+
+    if st.button("Se déconnecter"):
+        st.session_state["admin_authenticated"] = False
+        st.rerun()
 
     tab_users, tab_models, tab_logs = st.tabs(
         [

@@ -90,7 +90,7 @@ Le dump de livraison a été anonymisé sans modifier la base de développement 
 - nom utilisateur remplacé par `Administrateur Démo` ;
 - e-mail remplacé par `admin.demo@example.invalid` ;
 - noms d'inspecteur remplacés par `Inspecteur Démo` ;
-- valeur de `password_hash` remplacée par un hash bcrypt factice et inutilisable comme mot de passe connu.
+- valeur de `password_hash` remplacée par le hash SHA-256 du mot de passe de démonstration documenté ci-dessous.
 
 ### 4. Configurer les variables d'environnement
 
@@ -145,6 +145,15 @@ Le compte ne possède ni `DROP`, ni `CREATE`, ni `ALTER`, ni `INDEX`, ni `GRANT 
 
 Ces identifiants sont des identifiants de démonstration livrables. Ils doivent être changés ou supprimés après l'évaluation.
 
+### Identifiants administrateur applicatif
+
+```text
+E-mail : admin.demo@example.invalid
+Mot de passe : Admin_DroneInspect_2026!
+```
+
+L'accès à la page **Administration** nécessite désormais cette connexion applicative.
+
 ## Identifiants de connexion à la base SQL
 
 ```text
@@ -159,13 +168,14 @@ L'application ne doit jamais utiliser ni exposer le compte MySQL `root`. La conf
 
 ## Accès administrateur au back-office
 
-Dans la version locale actuelle, Streamlit ne présente pas encore d'écran d'authentification applicative. Pour accéder au back-office :
+La page **Administration** de Streamlit présente un formulaire de connexion applicative. Pour accéder au back-office :
 
 1. lancer Streamlit ;
 2. ouvrir `http://localhost:8501` ;
-3. sélectionner **Administration** dans le menu latéral.
+3. sélectionner **Administration** dans le menu latéral ;
+4. saisir l'e-mail et le mot de passe administrateur indiqués dans la section « Identifiants de test ».
 
-Le premier utilisateur actif ayant le rôle `Administrateur` dans la table `users` est utilisé pour la traçabilité des actions. Le compte MySQL `demo_reviewer` permet les lectures et écritures nécessaires, mais ne constitue pas un compte de connexion visuel au back-office. Avant toute exposition publique, une authentification serveur et un contrôle d'accès par rôle doivent être ajoutés.
+Seul un utilisateur actif ayant le rôle `Administrateur` et un hash SHA-256 valide dans la table `users` peut ouvrir cette page. L'authentification reste active pendant la session Streamlit et un bouton **Se déconnecter** permet de la réinitialiser. Le compte MySQL `demo_reviewer` permet les lectures et écritures nécessaires, mais ne constitue pas le compte de connexion visuel au back-office.
 
 ## Import du référentiel
 

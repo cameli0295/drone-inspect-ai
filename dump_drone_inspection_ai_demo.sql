@@ -319,7 +319,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Administrateur Démo','admin.demo@example.invalid','$2b$12$xuKhwinUwUK0eIOoYTgngO3sejFA3iNcOHjIRqovmnww2yuFhoBEO','Administrateur','2026-07-06 15:37:58',1);
+INSERT INTO `users` VALUES (1,'Administrateur Démo','admin.demo@example.invalid','b6a1d1be6af2827fcf17d2cb7e2565a6ea88a415dd399bca65be4e14dcff62ce','Administrateur','2026-07-06 15:37:58',1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
