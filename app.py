@@ -683,12 +683,7 @@ def ensure_database_compatibility() -> None:
 
     Cette migration est idempotente :
     elle peut être exécutée à chaque démarrage sans dupliquer les colonnes.
-
-    Le compte administrateur existant reçoit le mot de passe initial
-    ``Admin123!`` uniquement si son hash est absent ou invalide.
     """
-    default_hash = hashlib.sha256("Admin123!".encode("utf-8")).hexdigest()
-
     with mysql_transaction() as (_, cursor):
         cursor.execute("SHOW COLUMNS FROM users LIKE 'password_hash'")
         if cursor.fetchone() is None:
@@ -703,28 +698,6 @@ def ensure_database_compatibility() -> None:
                 "ALTER TABLE users "
                 "ADD COLUMN is_active BOOLEAN NOT NULL DEFAULT TRUE"
             )
-
-        cursor.execute(
-            """
-            SELECT user_id, password_hash
-            FROM users
-            WHERE role = 'Administrateur'
-            ORDER BY user_id
-            """
-        )
-        administrators = cursor.fetchall()
-
-        for user_id, current_hash in administrators:
-            if not is_valid_sha256(current_hash):
-                cursor.execute(
-                    """
-                    UPDATE users
-                    SET password_hash = %s,
-                        is_active = TRUE
-                    WHERE user_id = %s
-                    """,
-                    (default_hash, user_id),
-                )
 
 
 def get_id_by_name(

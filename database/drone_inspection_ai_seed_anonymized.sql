@@ -42,11 +42,11 @@ VALUES
   (1, 'MobileNetV2', 'CNN Transfer Learning', 1, 'Classification binaire', '300x300x3', 2, 'models/MobileNetV2_archive_structure_commente.keras', 99.87, 'Détection binaire fissure / absence de fissure.'),
   (2, 'EfficientNetB3', 'CNN Transfer Learning', 2, 'Classification multiclasses', '300x300x3', 6, 'models/efficientnetb3_concrete_defects_corrige.keras', NULL, 'Classification multi-étiquette des défauts du béton.');
 
--- Le mot de passe initial de démonstration est Admin123! ; à changer immédiatement.
+-- Compte applicatif de démonstration documenté dans le README ; à changer immédiatement.
 INSERT INTO users
   (user_id, full_name, email, password_hash, role, is_active)
 VALUES
-  (1, 'Administrateur Démo', 'admin.demo@example.invalid', '3eb3fe66b31e3b4d10fa70b5cad49c7112294af6ae4e476a1c405155d45aa121', 'Administrateur', TRUE);
+  (1, 'Administrateur Démo', 'admin.demo@example.invalid', 'b6a1d1be6af2827fcf17d2cb7e2565a6ea88a415dd399bca65be4e14dcff62ce', 'Administrateur', TRUE);
 
 INSERT INTO inspections
   (inspection_id, drone_id, inspection_date, location, infrastructure_type, inspector_name, weather_conditions, status, description)
